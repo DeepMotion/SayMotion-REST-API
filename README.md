@@ -998,13 +998,7 @@ attach raw bytes of the model or thumbnail file in the request body.
    </td>
   </tr>
   <tr>
-   <td>599
-   </td>
-   <td>Pipeline timeout
-   </td>
-  </tr>
-  <tr>
-   <td>594
+   <td>494
    </td>
    <td>Invalid pipeline Input
    </td>
@@ -1012,7 +1006,7 @@ attach raw bytes of the model or thumbnail file in the request body.
   <tr>
    <td>501
    </td>
-   <td>Error while generating motionanimation
+   <td>Error while generating motion
    </td>
   </tr>
   <tr>
@@ -1028,9 +1022,9 @@ attach raw bytes of the model or thumbnail file in the request body.
    </td>
   </tr>
   <tr>
-   <td>603503
+   <td>603
    </td>
-   <td>Error processing pose trackingthe parameters
+   <td>Error processing pose tracking parameters
    </td>
   </tr>
   <tr>
@@ -1070,7 +1064,7 @@ attach raw bytes of the model or thumbnail file in the request body.
    </td>
   </tr>
   <tr>
-   <td>704504
+   <td>704
    </td>
    <td>Error loading the character animation assets for pose corrections
    </td>
@@ -1088,24 +1082,6 @@ attach raw bytes of the model or thumbnail file in the request body.
    </td>
   </tr>
   <tr>
-   <td>505
-   </td>
-   <td>Physics Filter is incompatible with the custom characters
-   </td>
-  </tr>
-  <tr>
-   <td>507
-   </td>
-   <td>Error while processing the body tracking
-   </td>
-  </tr>
-  <tr>
-   <td>509
-   </td>
-   <td>Error loading the configurations
-   </td>
-  </tr>
-  <tr>
    <td>803
    </td>
    <td>Error processing bvh exporter parameters
@@ -1118,15 +1094,15 @@ attach raw bytes of the model or thumbnail file in the request body.
    </td>
   </tr>
   <tr>
-   <td>810510
+   <td>810
    </td>
-   <td>Error saving bvh resultsError open internal files
+   <td>Error saving bvh results
    </td>
   </tr>
   <tr>
-   <td>899599
+   <td>899
    </td>
-   <td>Bvh exporting timeoutMotion generation timeout
+   <td>Bvh exporting timeout
    </td>
   </tr>
   <tr>
@@ -1220,4 +1196,3 @@ attach raw bytes of the model or thumbnail file in the request body.
    </td>
   </tr>
 </table>
-
