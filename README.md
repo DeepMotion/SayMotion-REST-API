@@ -19,6 +19,22 @@ Initial rest APIs
 
 /job/download (changes due to variant & inpainting generation)
 
+# _Beta v1.1.1_
+
+/job/process (Added skipFBX parameter)
+
+# _Beta v1.2.0_
+
+/job/process (Added merging parameter)
+
+# _Beta v1.3.0_
+
+/job/import/animate3d (Added new job api to import animate3d jobs to saymotion)
+
+# _Beta v1.4.0_
+
+/job/process (Added support for rerun, refine, loop request)
+
 The SayMotion REST API lets you convert text prompts into 3D animations without having to use the Saymotion [Web Portal](https://saymotion.ai/). It can be used from web, mobile or desktop apps.
 
 
@@ -215,13 +231,11 @@ Job APIs
 
 &lt;params> specifies additional parameters that will be passed to the specified processor.
 
-For the **text2motion **processor, here are the parameters for a regular job.
+For the **text2motion **processor, here are the parameters for a job.
 
 "params":
 
  [
-
- “prompt=&lt;value>”,
 
  "model=&lt;value>”,
 
@@ -235,9 +249,24 @@ For the **text2motion **processor, here are the parameters for a regular job.
 
 “rootAtOrigin=&lt;value>”
 
+“skipFBX=<value>”
+
+“numVariant=<value>” (not applicable for rerun job)
+
  ]
 
-And here are the additional parameters for an inpainting job
+parameters for a regular animation generation job:
+
+"params":
+
+ [
+
+  “prompt=&lt;value>”
+
+ ]
+
+ 
+And here are the common parameters for an inpainting, merging, loop, refine & rerun job
 
 "params":
 
@@ -245,15 +274,73 @@ And here are the additional parameters for an inpainting job
 
  “t2m_rid=&lt;value>”,
 
- “variant_id=&lt;value>”,
+ “variant_id=&lt;value>”
 
- “inPaintingRequest={ “prompt” :&lt;value>,  “intervals” : [ { “start” :&lt;value>, “end”:&lt;value> } ] }”
+ ]
+ 
+Inpainting exclusive parameter:
+
+"params":
+
+ [
+
+ ‘inPaintingRequest={ “prompt” :&lt;value>,  “intervals” : [ { “start” :&lt;value>, “end”:&lt;value> } ] }’
 
  ]
 
+ Merging exclusive parameter:
+
+ "params":
+
+ [
+ 
+ ‘mergingRequest={“t2m_rid”:<value>,“variant_id”:<value>,“editRequest”:{"numTrimLeft" : <value>, "numTrimRight" : <value>},“prompt”: <value>,“blendDuration”: <value>}’
+ 
+ ]
+
+Refine exclusive parameter:
+
+"params":
+
+ [
+ 
+‘refineRequest={“prompt”: <value> (optional),“creativity”: <value>}’
+
+]
+
+Rerun exclusive parameter:
+
+"params":
+
+ [
+ 
+‘rerunRequest={“rerun”: <0 or 1>}’
+
+]
+
+Loop exclusive parameter:
+
+"params":
+
+ [
+ 
+‘loopRequest={
+“prompt”: <value> (optional),
+"numReps": <value>,
+“blendDuration”: <value>,
+"fixRootMode": <value>,
+"fixRootPositionAltitude": <value>,
+"fixRootPositionHorizontal": <value>,
+"fixRootOrientation": <value>,
+"fixAcrossEntireMotion": <value>
+}’
+
+]
+
+
 **prompt**
 
-A detailed text prompt to generate motion with. For inpainting jobs, the prompt parameter should be included inside the inPaintingRequest parameter, instead of as a standalone parameter in a regular job.
+A detailed text prompt to generate motion with. For inpainting, merging & refine jobs, the prompt parameter should be included inside the inPaintingRequest, mergingRequest or refineRequest parameter, instead of as a standalone parameter in a regular generation job.
 
 **model**
 
@@ -287,6 +374,22 @@ This parameter influences motion generation to improve it in some cases like int
 * Place a root joint at the origin of the output character. This is helpful in some cases, for example, for UE4 retargeting.
 * Default value is 0 and value can be either 0 or 1
 
+**skipFBX (optional)**
+
+
+
+* Skips FBX format generation. Set skipFBX=1
+
+
+**numVariant (optional)**
+
+
+
+* How many variants to be generated. Value ranges from 1 to 8. Default is 1
+
+
+
+
 **requestedAnimationDuration (optional)**
 
 
@@ -305,11 +408,117 @@ This parameter influences motion generation to improve it in some cases like int
 
 * It is a specific variant animation id from the above previously generated text2motion job
 
+
+**blendDuration**
+
+
+
+* duration in seconds of the merge or loop generated frames
+
+
+**editRequest**
+
+
+
+* A json string, containing simple edit requests to the inpainting/merging region such as trimming it from left (integer value) or right (integer value). The values represent frame counts and are always positive.
+
+**creativity**
+
+
+
+* Used for refine animation . Range is 0.0 to 1.0. Higher the value, more AI styling will be brought into the original animation.
+
+
+**numReps**
+
+
+
+* Number of repetition in loop request. value ranges from 1 to any positive number.
+
+
+**fixRootMode**
+
+
+
+* For loop request. Value should be either 'INTERPOLATION' or 'LOCKED'
+
+
+
+**fixRootPositionAltitude**
+
+
+
+* For loop request. Value: 1 (enabled) or 0 (disabled)
+
+
+
+**fixRootPositionHorizontal**
+
+
+
+* For loop request. Value: 1 (enabled) or 0 (disabled)
+
+
+
+
+**fixRootOrientation**
+
+
+
+* For loop request. Value: 1 (enabled) or 0 (disabled)
+
+
+
+
+**fixAcrossEntireMotion**
+
+
+
+* For loop request. Value: 1 (entire motion) or 0 (transition area)
+
+
+
+
+
 **inPaintingRequest**
 
 
 
-* A json string, containing inpainting prompt and intervals in frame numbers.
+* A json string, containing exclusive inpainting related information.
+
+
+**mergingRequest**
+
+
+
+* A json string, containing exclusive merging related information.
+
+
+
+**rerunRequest**
+
+
+
+* A json string, containing exclusive rerun related information.
+
+
+
+**refineRequest**
+
+
+
+* A json string, containing exclusive refine related information.
+
+
+
+**loopRequest**
+
+
+
+* A json string, containing exclusive loop related information.
+
+
+
 
 For the **render **processor, here are the parameters.
 
@@ -726,6 +935,57 @@ Client can specify one or multiple status value(s) along with processor id to re
 {
 <p>
 “result”: true
+<p>
+ }
+   </td>
+  </tr>
+</table>
+
+
+**API 6:  Import Animate 3d job to saymotion**
+
+
+<table>
+  <tr>
+   <td><strong>Desc</strong>
+   </td>
+   <td>Start importing Animate 3D job. Please use {host}/job/v1/status/rid to get import status
+   </td>
+  </tr>
+  <tr>
+   <td><strong>Method + URI</strong>
+   </td>
+   <td>POST {host}/job//v1/import/animate3d/rid
+   </td>
+  </tr>
+  <tr>
+   <td><strong>Header(s)</strong>
+   </td>
+   <td>cookie:dmsess=&lt;cookie-value-returned-from-authentication-api>
+   </td>
+  </tr>
+  <tr>
+   <td><strong>Request</strong>
+   </td>
+   <td>JSON object:
+    <p>
+{
+<p>
+"model": <saymotion model id>,
+<p>
+“params": [<params>, ...] (animate3d job params array: modified ones Or if not modified then originals)
+<p>
+ }
+   </td>
+  </tr>
+  <tr>
+   <td><strong>Response</strong>
+   </td>
+   <td>JSON object:
+<p>
+{
+<p>
+"rid": <request id>
 <p>
  }
    </td>
