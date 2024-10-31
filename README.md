@@ -35,6 +35,11 @@ Initial rest APIs
 
 /job/process (Added support for rerun, refine, loop request)
 
+# _Beta v1.5.0_
+
+/prompt/optimize (Added prompt optimization api)
+
+
 The SayMotion REST API lets you convert text prompts into 3D animations without having to use the Saymotion [Web Portal](https://saymotion.ai/). It can be used from web, mobile or desktop apps.
 
 
@@ -1233,6 +1238,220 @@ attach raw bytes of the model or thumbnail file in the request body.
   </tr>
 </table>
 
+
+# Prompt APIs
+
+**API 1: Start Optimizing**
+
+
+<table>
+  <tr>
+   <td><strong>Desc</strong>
+   </td>
+   <td>Start processing user prompt to saymotion flavored prompt
+   </td>
+  </tr>
+  <tr>
+   <td><strong>Method + URI</strong>
+   </td>
+   <td>POST {host}/prompt/v1/optimize
+   </td>
+  </tr>
+  <tr>
+   <td><strong>Header(s)</strong>
+   </td>
+   <td>cookie:dmsess=&lt;cookie-value-returned-from-authentication-api>
+   </td>
+  </tr>
+  <tr>
+   <td><strong>Request</strong>
+   </td>
+   <td>POST body should include a JSON object:
+<p>
+{
+<p>
+  “params": [&lt;params>, ...]
+<p>
+}.
+<p>
+ 
+<p>
+&lt;processor> specifies which processor to use to process the job, must be one of the following:
+
+<table>
+  <tr>
+   <td><strong>Processor Id</strong>
+   </td>
+   <td><strong>Description</strong>
+   </td>
+  </tr>
+  <tr>
+   <td>llm
+   </td>
+   <td>Converts user prompts to saymotion flavored prompt
+   </td>
+  </tr>
+</table>
+&lt;params> specifies additional parameters that will be passed to the specified processor.
+
+For the **text2motion **processor, here are the parameters for a job.
+
+"params":
+
+ [
+ "prompt=&lt;value>", 
+ "breakIntoActionablePrompts=&lt;1 or 0>" (optional)
+ ]
+
+ </td>
+  </tr>
+  <tr>
+   <td>
+**Response**
+
+   </td>
+   <td>JSON object:
+
+{
+
+  "rid": &lt;request id>
+
+}
+
+   </td>
+  </tr>
+</table>
+
+
+**API 2: Poll for prompt optimization Status**
+
+
+<table>
+  <tr>
+   <td><strong>Desc</strong>
+   </td>
+   <td>Polls for real-time status of a given processing job
+   </td>
+  </tr>
+  <tr>
+   <td><strong>Method + URI</strong>
+   </td>
+   <td>GET {host}/prompt/v1/status/rid
+<p>
+GET {host}/prompt/v1/status/rid1,rid2,..,rid
+   </td>
+  </tr>
+  <tr>
+   <td><strong>Header(s)</strong>
+   </td>
+   <td>cookie:dmsess=&lt;cookie-value-returned-from-authentication-api>
+   </td>
+  </tr>
+  <tr>
+   <td><strong>Request</strong>
+   </td>
+   <td>
+Use comma (‘,’) to separate multiple request ids if retrieving status for more than 1 request.
+   </td>
+  </tr>
+  <tr>
+   <td><strong>Response</strong>
+   </td>
+   <td>JSON object:
+<p>
+{
+<p>
+  "count": &lt;number of records in status array>,
+<p>
+  "status": [
+<p>
+     &lt;status>,
+<p>
+     … …
+<p>
+  ]
+<p>
+}
+<p>
+Each element in status array is a JSON object:
+<p>
+{
+<p>
+  "rid": &lt;request id>,
+<p>
+  "status": &lt;status name>,
+<p>
+  "details": &lt;status details, see below>,
+<p>
+  “positionInQueue”: &lt;position in the queue for only PROGRESS status>
+<p>
+}
+<p>
+&lt;status name> is one of the following <strong>case sensitive</strong> values:
+
+<table>
+  <tr>
+   <td><strong>Status Name</strong>
+   </td>
+   <td><strong>Description</strong>
+   </td>
+  </tr>
+  <tr>
+   <td>PROGRESS
+   </td>
+   <td>Request is still being processed
+   </td>
+  </tr>
+  <tr>
+   <td>SUCCESS
+   </td>
+   <td>Request is processed successfully
+   </td>
+  </tr>
+  <tr>
+   <td>FAILURE
+   </td>
+   <td>Request has failed
+   </td>
+  </tr>
+</table>
+
+
+&lt;status details> for PROGRESS:
+
+{
+
+  “step”: &lt;current step>,
+
+  “total”: &lt;expected total number of steps>
+
+}
+
+&lt;status details> for SUCCESS:
+
+{
+
+  “In”: &lt;null>,
+
+  “out”: &lt;saymotion flavored prompt array: a json string>
+
+}
+
+&lt;status details> for FAILURE include last error message. Currently the format is:
+
+{
+
+  “exc_message”: &lt;exception message, if any>,
+
+  “exc_type”: &lt;exception type, if any>
+
+}
+
+But please note the format may change if we decide to mask error information (or pass more information) to client applications.
+
+   </td>
+  </tr>
+</table>
 
 
 # Saymotion Restful API Error Codes (Updates as we add more features)
