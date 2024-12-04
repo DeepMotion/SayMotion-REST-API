@@ -252,8 +252,6 @@ For the **text2motion **processor, here are the parameters for a job.
 
 “poseFilteringStrength=&lt;value>”,
 
-“rootAtOrigin=&lt;value>”
-
 “skipFBX=<value>”
 
 “numVariant=<value>” (not applicable for rerun job)
@@ -372,12 +370,6 @@ This parameter influences motion generation to improve it in some cases like int
 * Applies an advanced AI filter that helps remove jitter and produce smoother animations though may result in lower animation accuracy for certain frames or sequences
 * Default value is 0.0 and range is 0.0 - 1.0 
 
-**rootAtOrigin (optional)**
-
-
-
-* Place a root joint at the origin of the output character. This is helpful in some cases, for example, for UE4 retargeting.
-* Default value is 0 and value can be either 0 or 1
 
 **skipFBX (optional)**
 
