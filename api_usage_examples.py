@@ -4,34 +4,19 @@ import json
 import requests
 import time
 
-_apiServerUrl = ''
+# Please replace _apiServerUrl, _clientId and _clientSecret with credentials from your Animate 3D Rest API Portal
 
-def check_json(fpath):
-    if not os.path.exists(fpath):
-        raise argparse.ArgumentTypeError('Filename %r doesn\'t exist.' % fpath)
-    
-    if fpath[-5:] != '.json':
-        raise argparse.ArgumentTypeError('%r is not a JSON file.' % fpath)
+_apiServerUrl = 'copy_your_Production URL_here_from_API_portal'
+_clientId = 'copy_your_clientId_here_from_API_portal'
+_clientSecret = 'copy_your_clientSecret_here_from_API_portal'
 
-    return fpath
 
-def parse_user_credentials():
-    parser = argparse.ArgumentParser(prog='SayMotion REST API CLI Demo', 
-            description='Specify JSON file with user credentials')
-    parser.add_argument('credentials', 
-        nargs='?', type=check_json, 
-        help='A JSON file must be specified')
-    args = parser.parse_args()
-    return args.credentials
-
-def read_user_credentials(fpath):
-    with open(fpath) as f:
-        jsonData = json.load(f)
-        global _sessionCredentials
-        _sessionCredentials = jsonData['clientId'], jsonData['clientSecret']
-        global session
-        session = get_session()
-        print('Credentials successfully read. \n')
+def init_user_credentials():
+    global _sessionCredentials
+    _sessionCredentials = _clientId, _clientSecret
+    global session
+    session = get_session()
+    print('Credentials successfully set. \n')
 
 def get_session():
     authUrl = _apiServerUrl + '/account/v1/auth'
@@ -241,19 +226,27 @@ def new_text2motion_job():
     modelStr = 'model=' + charList[charSel - 1]['id']
 
     prompt = input("Please enter text prompt: ")
-    number = float(input("Please enter the expected animation durantion between 1 and 10 seconds: "))
-    number = max(1, min(number, 10))
+    number = float(input("Please enter the expected animation durantion between 0 and 10 seconds (0 means letting AI decide): "))
+    number = max(0, min(number, 10))
     
     processUrl = _apiServerUrl + '/job/v1/process/text2motion'
     processCfgJson = None
     
-    processCfgJson = {
-        "params": [
-            "prompt=\"" + prompt + "\"",
-            "requestedAnimationDuration=" + str(number),
-            modelStr
-        ]
-    }
+    if number > 0:
+        processCfgJson = {
+            "params": [
+                "prompt=\"" + prompt + "\"",
+                "requestedAnimationDuration=" + str(number),
+                modelStr
+            ]
+        }
+    else:
+         processCfgJson = {
+            "params": [
+                "prompt=\"" + prompt + "\"",
+                modelStr
+            ]
+        }      
     
     print(processUrl)
     print(processCfgJson)
@@ -346,9 +339,8 @@ def main_options():
     mainOptions[selection]()
 
 def main():
-    read_user_credentials(args)
+    init_user_credentials()
     main_options()
 
 if __name__ == '__main__':
-    args = parse_user_credentials()
     main()
