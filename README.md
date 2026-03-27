@@ -43,7 +43,7 @@ Initial rest APIs
 The SayMotion REST API lets you convert text prompts into 3D animations without having to use the Saymotion [Web Portal](https://saymotion.ai/). It can be used from web, mobile or desktop apps.
 
 
-## Python SDK
+# Python SDK
 
 For Python developers, an official SDK is available to simplify integration:
 
