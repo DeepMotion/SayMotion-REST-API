@@ -1,15 +1,14 @@
 # **Saymotion REST API**
 
 
-## Revisions
+# Revisions
 
-
-# _Beta v1.0.0_
+## _Beta v1.0.0_
 
 Initial rest APIs
 
 
-# _Beta v1.1.0_
+## _Beta v1.1.0_
 
 /account/creditBalance (introducing feature limits)
 
@@ -19,23 +18,23 @@ Initial rest APIs
 
 /job/download (changes due to variant & inpainting generation)
 
-# _Beta v1.1.1_
+## _Beta v1.1.1_
 
 /job/process (Added skipFBX parameter)
 
-# _Beta v1.2.0_
+## _Beta v1.2.0_
 
 /job/process (Added merging parameter)
 
-# _Beta v1.3.0_
+## _Beta v1.3.0_
 
 /job/import/animate3d (Added new job api to import animate3d jobs to saymotion)
 
-# _Beta v1.4.0_
+## _Beta v1.4.0_
 
 /job/process (Added support for rerun, refine, loop request)
 
-# _Beta v1.5.0_
+## _Beta v1.5.0_
 
 /prompt/optimize (Added prompt optimization api)
 
@@ -49,7 +48,6 @@ For Python developers, an official SDK is available to simplify integration:
 
 - **Install**: `pip install dm-saymotion-api` — [PyPI](https://pypi.org/project/dm-saymotion-api/)
 - **Source**: [GitHub](https://github.com/yaksea/dm-saymotion-api-python-sdk)
-- 
 
 # Authentication
 
