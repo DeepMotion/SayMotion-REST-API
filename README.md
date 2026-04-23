@@ -41,13 +41,19 @@ Initial rest APIs
 
 The SayMotion REST API lets you convert text prompts into 3D animations without having to use the Saymotion [Web Portal](https://saymotion.ai/). It can be used from web, mobile or desktop apps.
 
-
-# Python SDK
-
+# SDK
+## Python SDK
 For Python developers, an official SDK is available to simplify integration:
 
 - **Install**: `pip install dm-saymotion-api` — [PyPI](https://pypi.org/project/dm-saymotion-api/)
 - **Source**: [GitHub](https://github.com/yaksea/dm-saymotion-api-python-sdk)
+
+## JavaScript/TypeScript SDK
+
+For NodeJS developers, an official SDK is available to simplify integration:
+
+- **Install**: `npm install dm-saymotion-api` — [npmjs](https://www.npmjs.com/package/dm-saymotion-api)
+- **Source**: [GitHub](https://github.com/yaksea/dm-saymotion-api-js-sdk)
 
 # Authentication
 
